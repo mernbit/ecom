@@ -1,0 +1,11 @@
+{
+  "name": "icart",
+  "version": "1.0.0",
+  "description": "A backend project for an ecommerce website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hashir",
+  "license": "ISC"
+}
