@@ -4,10 +4,17 @@ const bcrypt = require("bcrypt");
 const registerUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       firstName,
       lastName,
+      role: email === process.env.ADMIN_EMAIL ? "admin" : "user",
       email,
       password: hashedPassword,
     });
