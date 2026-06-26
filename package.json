@@ -1,5 +1,5 @@
 {
-  "name": "icart",
+  "name": "ShopVerse",
   "version": "1.0.0",
   "description": "A backend project for an ecommerce website",
   "main": "src/index.js",
@@ -17,6 +17,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.2",
+    "multer": "^2.2.0",
     "nodemon": "^3.1.14"
   }
 }

@@ -13,7 +13,6 @@ const verifyToken = async (req, res, next) => {
       }
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decodedToken;
-      console.log("decodedToken", decodedToken);
       next();
     } else {
       return res.status(401).json({
