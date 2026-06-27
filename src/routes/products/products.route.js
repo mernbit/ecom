@@ -3,6 +3,8 @@ const multer = require("multer");
 const verifyToken = require("../../middleware/verifyToken.middleware");
 const createProduct = require("../../controller/products/createProduct.controller");
 const createCategory = require("../../controller/products/createCategory.controller");
+const getProducts = require("../../controller/products/getProducts.controller");
+const deleteProduct = require("../../controller/products/delete.controller");
 const productRouter = express.Router();
 const upload = multer({ dest: "uploads/" });
 
@@ -13,5 +15,7 @@ productRouter.post(
   createProduct,
 );
 productRouter.post("/category/create", verifyToken, createCategory);
+productRouter.get("/get", getProducts);
+productRouter.delete("/delete/:id", verifyToken, deleteProduct);
 
 module.exports = productRouter;

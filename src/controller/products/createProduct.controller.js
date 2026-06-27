@@ -16,15 +16,38 @@ const createProduct = async (req, res) => {
       return res.status(400).json({ message: "No files uploaded" });
     }
 
-    const uploadResult = [];
-    files.map(async (f) => {
-      const result = await upload(f.path, {
-        folder: "products",
-      });
-      uploadResult.push(result.secure_url);
-      fs.unlinkSync(f.path);
-    });
+    // const uploadResult = [];
+    // for (const f of files) {
+    //   const result = await upload(f.path, {
+    //     folder: "products",
+    //   });
+    //   uploadResult.push(result.secure_url);
+    //   fs.unlinkSync(f.path);
+    // }
+    const uploadResult = await Promise.all(
+      files.map(async (file) => {
+        try {
+          const result = await upload(file.path, {
+            folder: "products",
+          });
+          return result.secure_url;
+        } catch (error) {
+          console.log(error);
+          return res.status(500).json({
+            message: "Failed to upload images",
+            error,
+          });
+        } finally {
+          fs.unlinkSync(file.path);
+        }
+      }),
+    );
     const { name, quantity, price, category, description } = req.body;
+    if (!name || !quantity || !price || !category || !description) {
+      return res.status(400).json({
+        message: "Please provide all required fields",
+      });
+    }
     const product = new Products({
       name,
       quantity,
