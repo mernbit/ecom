@@ -1,14 +1,14 @@
 const User = require("../../model/users/user.model");
 
-const updateProfile = async (res, req) => {
+const updateProfile = async (req, res) => {
   try {
-    const { id } = req.user;
+    const id = req.user.id;
     const { name, email, phone, firstName, lastName, profileImage } = req.body;
     const user = await User.findByIdAndUpdate(
       id,
       { name, email, phone, firstName, lastName, profileImage },
       { new: true },
-    );
+    ).select("-password");
     if (!user) {
       return res
         .status(404)

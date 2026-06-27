@@ -19,6 +19,14 @@ const registerUser = async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
     const { firstName, lastName, email, phone, password } = req.body;
+
+    if (!firstName || !lastName || !email || !phone || !password) {
+      return res.status(400).json({
+        message:
+          "Please provide all required fields (firstName, lastName, email, phone, password)",
+      });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
