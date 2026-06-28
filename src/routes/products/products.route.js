@@ -6,6 +6,8 @@ const createCategory = require("../../controller/products/createCategory.control
 const getProducts = require("../../controller/products/getProducts.controller");
 const deleteProduct = require("../../controller/products/delete.controller");
 const editCategory = require("../../controller/products/editCategory.controller");
+const updateProduct = require("../../controller/products/updateProduct.controller");
+const getOne = require("../../controller/products/getOne.controller");
 const productRouter = express.Router();
 const upload = multer({ dest: "uploads/" });
 
@@ -17,6 +19,13 @@ productRouter.post(
 );
 productRouter.post("/category/create", verifyToken, createCategory);
 productRouter.get("/get", getProducts);
+productRouter.get("/get/:id", getOne);
 productRouter.delete("/delete/:id", verifyToken, deleteProduct);
 productRouter.put("/category/edit/:id", verifyToken, editCategory);
+productRouter.put(
+  "/update/:id",
+  verifyToken,
+  upload.array("images", 5),
+  updateProduct,
+);
 module.exports = productRouter;

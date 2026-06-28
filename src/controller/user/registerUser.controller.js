@@ -11,13 +11,6 @@ const registerUser = async (req, res) => {
   }
 
   try {
-    const result = await upload(req.file.path, {
-      folder: "user",
-    });
-    img = result.secure_url;
-    if (img) {
-      fs.unlinkSync(req.file.path);
-    }
     const { firstName, lastName, email, phone, password } = req.body;
 
     if (!firstName || !lastName || !email || !phone || !password) {
@@ -33,6 +26,13 @@ const registerUser = async (req, res) => {
         message: "User already exists",
       });
     }
+    const result = await upload(req.file.path, {
+      folder: "user",
+    });
+    img = result.secure_url;
+    if (img) {
+      fs.unlinkSync(req.file.path);
+    }
     const existingUserPhone = await User.findOne({ phone });
     if (existingUserPhone) {
       return res.status(400).json({
@@ -40,7 +40,18 @@ const registerUser = async (req, res) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({
+    // const user = new User({
+    //   firstName,
+    //   lastName,
+    //   role: email === process.env.ADMIN_EMAIL ? "admin" : "user",
+    //   email,
+    //   phone,
+    //   password: hashedPassword,
+    //   profileImage: img,
+    // });
+
+    // await user.save();
+    const user = await User.create({
       firstName,
       lastName,
       role: email === process.env.ADMIN_EMAIL ? "admin" : "user",
@@ -49,9 +60,6 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       profileImage: img,
     });
-
-    await user.save();
-
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
