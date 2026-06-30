@@ -1,20 +1,34 @@
+/* Attention required. 
+
+  This api replaces the old pictures with new picture. After debugging I found exactly whats causing this problem. Make sure to send old data along with the new data otherwise it will keep replacing. 
+  this is causing the existing images to go "null"...
+*/
+
 const Product = require("../../model/product/product.model");
 const fs = require("fs");
-const upload = require("../../utils/cloudinary");
+const { upload } = require("../../utils/cloudinary");
 
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { name, description, price, category, brand, stock, images } =
-      req.body;
-    if (!name || !description || !price || !category || !brand || !stock) {
+    const { name, description, price, category, quantity, images } = req.body;
+
+    if (!name || !description || !price || !category || !quantity) {
       return res.status(400).json({
         success: false,
+
         message: "Please provide all required fields",
       });
     }
+
     let uploadResult;
+    if ((req.files?.length || 0) + (images?.length || 0) > 5) {
+      return res.status(400).json({
+        success: false,
+        message: "You can only have 5 images in total",
+      });
+    }
     if (req.files) {
       uploadResult = await Promise.all(
         req.files.map(async (file) => {
@@ -35,20 +49,17 @@ const updateProduct = async (req, res) => {
         }),
       );
     }
-    let newImages = uploadResult;
+    let finalImages;
 
-    let finalImages = [...images, ...newImages];
-
-    const product = await Product.findByIdAndUpdate(
-      id,
+    const product = await Product.updateOne(
+      { _id: id },
       {
         name,
         description,
         price,
         images: finalImages,
         category,
-        brand,
-        stock,
+        quantity,
       },
       {
         new: true,
@@ -60,6 +71,7 @@ const updateProduct = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Failed to update product",
