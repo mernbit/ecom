@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/*  Barlow Font */
+@import "./styles/barlow.css"
