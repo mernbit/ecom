@@ -14,7 +14,7 @@ const userRouter = express.Router();
 
 userRouter.post("/register", upload.single("profileImage"), registerUser);
 userRouter.post("/login", loginUser);
-userRouter.get("/user", verifyToken, getUser);
+userRouter.get("/get-user", verifyToken, getUser);
 userRouter.delete("/delete", verifyToken, deleteUser);
 userRouter.put("/update", verifyToken, updateProfile);
 userRouter.post("/forgot-password", forgotPassword);
