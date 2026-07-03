@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import { useAuthContext } from "../../context/AuthContext";
+import ForgotPassword from "./ForgotPassword";
 const Auth = () => {
   const { isAuth } = useAuthContext();
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Auth = () => {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
   );
 };

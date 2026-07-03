@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Divider, message } from "antd";
 import axios from "axios";
 import { useAuthContext } from "../../../context/AuthContext";
+import Button from "../../../components/ui/Button";
 const initState = {
   email: "",
   password: "",
@@ -128,15 +129,29 @@ const Login = () => {
                     placeholder="Password"
                   />
                 </div>
+                <Link
+                  to="/auth/forgot-password"
+                  className="block text-red-500 text-end w-full cursor-pointer my-2"
+                >
+                  Forgot Password?
+                </Link>
 
                 <div className="mt-4">
-                  <button
+                  {/* <button
                     disabled={loading}
                     onClick={handleSubmit}
                     className="bg-red-500 cursor-pointer disabled:cursor-progress w-full py-3 text-white"
                   >
                     {loading ? <LoadingOutlined /> : "Login"}
-                  </button>
+                    </button> */}
+                  <Button
+                    variant="red"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className={"w-full!"}
+                  >
+                    {loading ? <LoadingOutlined /> : "Login"}
+                  </Button>
                   <p className="mt-2 tracking-wide text-center text-lg barlow-condensed-regular">
                     Don't have an account?{" "}
                     <Link
